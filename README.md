@@ -1,0 +1,1 @@
+# dotnet6_contenttype_ajax_examples
