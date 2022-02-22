@@ -7,31 +7,269 @@
 <p>Examples for application/json; charset=utf-8</p>
 
 <div>
-    <div class="btn btn-primary" id="btnGet">GET</div>
-    <div><small class="form-text text-muted"></small></div>
+    <div class="btn btn-primary" id="btnPostOneWO">POST</div>
+    <div><small class="form-text text-muted">POST to [FromBody] without application/json (415 - unsupported media type)</small></div>
 </div>
 
 <hr />
 
 <div>
-    <div class="btn btn-primary" id="btnPost">POST</div>
-    <div><small class="form-text text-muted"></small></div>
+    <div class="btn btn-primary" id="btnPostOneNamed">POST</div>
+    <div><small class="form-text text-muted">POST one named variable { myTestString: "myTestValue" }</small></div>
+</div>
+
+<hr />
+
+<div>
+    <div class="btn btn-primary" id="btnPostOne">POST</div>
+    <div><small class="form-text text-muted">POST one variable { "myTestValue" }</small></div>
+</div>
+
+<hr />
+
+<div>
+    <div class="btn btn-primary" id="btnPostOneWOStringify">POST</div>
+    <div><small class="form-text text-muted">POST one variable { "myTestValue" } - without stringify</small></div>
+</div>
+
+<hr />
+
+<div>
+    <div class="btn btn-primary" id="btnPostOneNamedWOFB">POST</div>
+    <div><small class="form-text text-muted">POST one named variable { myTestString: "myTestValue" } - without [FromBody]</small></div>
+</div>
+
+<hr />
+
+<div>
+    <div class="btn btn-primary" id="btnPostMulti">POST</div>
+    <div><small class="form-text text-muted">POST multiple parameters { myTestString: "myTestStringVal", myTestInt: 5, myTestBool: true }</small></div>
+</div>
+
+<hr />
+
+<div>
+    <div class="btn btn-primary" id="btnPostMultiObj">POST</div>
+    <div><small class="form-text text-muted">POST id and object { myTestGuid: "someGuid", myTestObj: someObj }</small></div>
+</div>
+
+<hr />
+
+<div>
+    <div class="btn btn-primary" id="btnPostObjWName">POST</div>
+    <div><small class="form-text text-muted">POST named object { myTestObj: someObj } </small></div>
+</div>
+
+<hr />
+
+<div>
+    <div class="btn btn-primary" id="btnPostObj">POST</div>
+    <div><small class="form-text text-muted">POST object { someObj } </small></div>
+</div>
+
+<hr />
+
+<div>
+    <div class="btn btn-primary" id="btnPostObjInvalid">POST</div>
+    <div><small class="form-text text-muted">POST object { someObj } with invalid type </small></div>
 </div>
 
 @section Scripts
 {
     <script type="text/javascript">
         $(function(){
-            $('#btnGet').on('click', function(){
-                $.get('@Url.Action("")', function(data){
-                    alert(data);
+            $('#btnPostOneWO').on('click', function(){
+                $.ajax({
+                    url: '@Url.Action("ReceiveOneVariableJson")',
+                    dataType: 'json',
+                    type: "POST",
+                    data: "myTestValue",
+                    success: function (returnData) {
+                        console.log(returnData);
+                    },
+                    error: function () {
+                        console.log("oops");
+                    }
                 });
             });
-            $('#btnPost').on('click', function(){
-                $.post('@Url.Action("")', {name: "test"}, function(data){
-                    alert(data);
+
+            $('#btnPostOneNamed').on('click', function(){
+                $.ajax({
+                    url: '@Url.Action("ReceiveOneVariableJson")',
+                    dataType: 'json',
+                    type: "POST",
+                    data: JSON.stringify({ myTestString: "myTestValue" }),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (returnData) {
+                        console.log(returnData);
+                    },
+                    error: function () {
+                        console.log("oops");
+                    }
                 });
             });
+
+            $('#btnPostOne').on('click', function(){
+                $.ajax({
+                    url: '@Url.Action("ReceiveOneVariableJson")',
+                    dataType: 'json',
+                    type: "POST",
+                    data: JSON.stringify("myTestValue"),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (returnData) {
+                        console.log(returnData);
+                    },
+                    error: function () {
+                        console.log("oops");
+                    }
+                });
+            });
+
+            $('#btnPostOneWOStringify').on('click', function(){
+                $.ajax({
+                    url: '@Url.Action("ReceiveOneVariableJson")',
+                    dataType: 'json',
+                    type: "POST",
+                    data: "myTestValue",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (returnData) {
+                        console.log(returnData);
+                    },
+                    error: function () {
+                        console.log("oops");
+                    }
+                });
+            });
+
+            $('#btnPostOneNamedWOFB').on('click', function(){
+                $.ajax({
+                    url: '@Url.Action("ReceiveOneVariable")',
+                    dataType: 'json',
+                    type: "POST",
+                    data: JSON.stringify({ myTestString: "myTestValue" }),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (returnData) {
+                        console.log(returnData);
+                    },
+                    error: function () {
+                        console.log("oops");
+                    }
+                });
+            });
+
+
+            $('#btnPostMulti').on('click', function(){
+                $.ajax({
+                    url: '@Url.Action("ReceiveMultipleParamsJson")',
+                    dataType: 'json',
+                    type: "POST",
+                    data: JSON.stringify({ myTestString: "myTestStringVal", myTestInt: 5, myTestBool: true }),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (returnData) {
+                        console.log(returnData);
+                    },
+                    error: function () {
+                        console.log("oops");
+                    }
+                });
+            });
+
+            $('#btnPostMultiObj').on('click', function(){
+                $.ajax({
+                    url: '@Url.Action("ReceiveIdAndObjectJson")',
+                    dataType: 'json',
+                    type: "POST",
+                    data: JSON.stringify({ myTestGuid: '@Guid.NewGuid()', myTestObj: getTestObject() }),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (returnData) {
+                        console.log(returnData);
+                    },
+                    error: function () {
+                        console.log("oops");
+                    }
+                });
+            });
+
+            $('#btnPostObjWName').on('click', function(){
+                $.ajax({
+                    url: '@Url.Action("ReceiveObjectJson")',
+                    dataType: 'json',
+                    type: "POST",
+                    data: JSON.stringify({myTestObj: getValidTestObject()}),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (returnData) {
+                        console.log(returnData);
+                    },
+                    error: function () {
+                        console.log("oops");
+                    }
+                });
+            });
+
+            $('#btnPostObj').on('click', function(){
+                $.ajax({
+                    url: '@Url.Action("ReceiveObjectJson")',
+                    dataType: 'json',
+                    type: "POST",
+                    data: JSON.stringify(getValidTestObject()),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (returnData) {
+                        console.log(returnData);
+                    },
+                    error: function () {
+                        console.log("oops");
+                    }
+                });
+            });
+
+            $('#btnPostObjInvalid').on('click', function(){
+                $.ajax({
+                    url: '@Url.Action("ReceiveObjectJson")',
+                    dataType: 'json',
+                    type: "POST",
+                    data: JSON.stringify(getInvalidTestObject()),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (returnData) {
+                        console.log(returnData);
+                    },
+                    error: function () {
+                        console.log("oops");
+                    }
+                });
+            });
+
+
+            function getValidTestObject(){
+                return {
+                    Id: '@Guid.NewGuid()',
+                    Name: "TestNameVal",
+                    EnumVal: 2,
+                    TestB: [{
+                        IdB: '@Guid.NewGuid()',
+                        NameB: "TestNameValB",
+                        TestC: [{
+                            IdC: '@Guid.NewGuid()',
+                            NameC: "TestNameValC"
+                        }]
+                    }]
+                };
+            }
+
+            function getInvalidTestObject(){
+                return {
+                    Id: '@Guid.NewGuid()',
+                    Name: "TestNameVal",
+                    EnumVal: "",
+                    TestB: [{
+                        IdB: '@Guid.NewGuid()',
+                        NameB: "TestNameValB",
+                        TestC: [{
+                            IdC: '@Guid.NewGuid()',
+                            NameC: "TestNameValC"
+                        }]
+                    }]
+                };
+            }
         });
     </script>
 }

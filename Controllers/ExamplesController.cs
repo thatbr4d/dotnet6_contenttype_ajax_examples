@@ -47,10 +47,23 @@ public class ExamplesController : Controller
     {
         return Json(myTestString);
     }
-
+    
+    [HttpPost]
     public JsonResult ReceiveMultipleParamsJson([FromBody]string myTestString, [FromBody]int myTestInt, [FromBody]bool myTestBool)
     {
         return Json($"{myTestString}, {myTestInt}, {myTestBool}");
+    }
+
+    [HttpPost]
+    public JsonResult ReceiveIdAndObjectJson([FromBody]Guid myTestGuid, [FromBody]TestObjectA myTestObj)
+    {
+        return Json(myTestObj);
+    }
+
+    [HttpPost]
+    public JsonResult ReceiveObjectJson([FromBody]TestObjectA myTestObj)
+    {
+        return Json(myTestObj);
     }
 
     #endregion
