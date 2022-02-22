@@ -7,31 +7,111 @@
 <p>Examples for application/x-www-form-urlencoded</p>
 
 <div>
-    <div class="btn btn-primary" id="btnGet">GET</div>
-    <div><small class="form-text text-muted"></small></div>
+    <div class="btn btn-primary" id="btnPostOne">POST</div>
+    <div><small class="form-text text-muted">POST one variable { "myTestValue" }</small></div>
 </div>
 
 <hr />
 
 <div>
-    <div class="btn btn-primary" id="btnPost">POST</div>
-    <div><small class="form-text text-muted"></small></div>
+    <div class="btn btn-primary" id="btnPostOneNamed">POST</div>
+    <div><small class="form-text text-muted">POST one named variable { myTestString: "myTestValue" }</small></div>
+</div>
+
+<hr />
+
+<div>
+    <div class="btn btn-primary" id="btnPostMulti">POST</div>
+    <div><small class="form-text text-muted">POST multiple parameters { myTestString: "myTestStringVal", myTestInt: 5, myTestBool: true }</small></div>
+</div>
+
+<hr />
+
+<div>
+    <div class="btn btn-primary" id="btnPostMultiObj">POST</div>
+    <div><small class="form-text text-muted">POST id and object { myTestGuid: "someGuid", myTestObj: someObj }</small></div>
 </div>
 
 @section Scripts
 {
     <script type="text/javascript">
         $(function(){
-            $('#btnGet').on('click', function(){
-                $.get('@Url.Action("")', function(data){
-                    alert(data);
+            $('#btnPostOne').on('click', function(){
+                $.ajax({
+                    url: '@Url.Action("ReceiveOneVariable")',
+                    dataType: 'json',
+                    type: "POST",
+                    data: "myTestValue",
+                    success: function (returnData) {
+                        console.log(returnData);
+                    },
+                    error: function () {
+                        console.log("oops");
+                    }
                 });
             });
-            $('#btnPost').on('click', function(){
-                $.post('@Url.Action("")', {name: "test"}, function(data){
-                    alert(data);
+
+            $('#btnPostOneNamed').on('click', function(){
+                $.ajax({
+                    url: '@Url.Action("ReceiveOneVariable")',
+                    dataType: 'json',
+                    type: "POST",
+                    data: { myTestString: "myTestValue" },
+                    success: function (returnData) {
+                        console.log(returnData);
+                    },
+                    error: function () {
+                        console.log("oops");
+                    }
                 });
             });
+
+            $('#btnPostMulti').on('click', function(){
+                $.ajax({
+                    url: '@Url.Action("ReceiveMultipleParams")',
+                    dataType: 'json',
+                    type: "POST",
+                    data: { myTestString: "myTestStringVal", myTestInt: 5, myTestBool: true },
+                    success: function (returnData) {
+                        console.log(returnData);
+                    },
+                    error: function () {
+                        console.log("oops");
+                    }
+                });
+            });
+
+            $('#btnPostMultiObj').on('click', function(){
+                $.ajax({
+                    url: '@Url.Action("ReceiveIdAndObject")',
+                    dataType: 'json',
+                    type: "POST",
+                    data: { myTestGuid: '@Guid.NewGuid()', myTestObj: getTestObject() },
+                    success: function (returnData) {
+                        console.log(returnData);
+                    },
+                    error: function () {
+                        console.log("oops");
+                    }
+                });
+            });
+
+            function getTestObject(){
+                return {
+                    Id: '@Guid.NewGuid()',
+                    Name: "TestNameVal",
+                    EnumVal: "",
+                    TestB: [{
+                        IdB: '@Guid.NewGuid()',
+                        NameB: "TestNameValB",
+                        TestC: [{
+                            IdC: '@Guid.NewGuid()',
+                            NameC: "TestNameValC"
+                        }]
+                    }]
+                };
+            }
+
         });
     </script>
 }
